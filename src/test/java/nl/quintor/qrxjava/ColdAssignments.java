@@ -17,7 +17,7 @@ public class ColdAssignments {
 
         Observable.just(1)
                 //---------start----------------
-                .map(n -> ++n)
+
                 //----------end-----------------
                 .subscribe(number::set);
 
@@ -31,7 +31,7 @@ public class ColdAssignments {
 
         Observable.just(1, 2, 3, 4)
                 //---------start----------------
-                .filter(n -> n % 2 == 0)
+
                 //----------end-----------------
                 .subscribe(numbers::add);
 
@@ -45,7 +45,7 @@ public class ColdAssignments {
 
         Observable.just(1, 2, 3, 4)
                 //---------start----------------
-                .scan((n1, n2) -> n1 + n2)
+
                 //----------end-----------------
                 .subscribe(number::set);
 
@@ -60,10 +60,7 @@ public class ColdAssignments {
 
         Observable.just(-33, 20, -20, 5, 10, 2)
                 //---------start----------------
-                .filter(n -> n > 0)
-                .filter(n -> n % 2 == 0)
-                .map(n -> n * 2)
-                .scan((n1, n2) -> n1 + n2)
+
                 //----------end-----------------
                 .subscribe(number::set);
 
@@ -78,9 +75,6 @@ public class ColdAssignments {
         Observable<Integer> even$ = Observable.just(3, 4);
 
         //---------start----------------
-
-        Observable.merge(odd$, even$)
-                .subscribe(numbers::add);
 
         //----------end-----------------
 

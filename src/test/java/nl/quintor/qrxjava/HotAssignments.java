@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,8 +27,6 @@ public class HotAssignments {
 
         //---------start----------------
 
-        number$.onNext(1);
-
         //----------end-----------------
 
         Assert.assertEquals(number.get(), 1);
@@ -38,7 +37,7 @@ public class HotAssignments {
     public void assignment2() {
         //---------start----------------x
 
-        Subject<Integer> number$ = BehaviorSubject.create();
+        Subject<Integer> number$ = null;
 
         //----------end-----------------
 
@@ -60,10 +59,6 @@ public class HotAssignments {
 
         //---------start--------------
 
-        Observable
-                .combineLatest(text$, number$, (s, n) -> s + n)
-                .subscribe(text::append);
-
         //---------end----------------
 
         text$.onNext("Number: ");
@@ -79,10 +74,6 @@ public class HotAssignments {
         AtomicInteger number = new AtomicInteger();
 
         //---------start--------------
-
-        number$
-                .delay(99, TimeUnit.MILLISECONDS)
-                .subscribe(number::set);
 
         //---------end----------------
 
@@ -108,8 +99,6 @@ public class HotAssignments {
 
         //---------start--------------
 
-        number$.onComplete();
-
         //---------end----------------
         number$.onNext(3);
 
@@ -124,17 +113,12 @@ public class HotAssignments {
 
         //---------start--------------
 
-        Disposable d = number$
-                .subscribe(numbers::add);
-
         //---------end----------------
 
         number$.onNext(1);
         number$.onNext(2);
 
         //---------start--------------
-
-        d.dispose();
 
         //---------end----------------
         number$.onNext(3);
@@ -143,31 +127,6 @@ public class HotAssignments {
         Assert.assertEquals(number$.hasComplete(), false);
     }
 
-    @Test()
-    public void assignment7() throws InterruptedException {
-        Subject<Integer> number$ = PublishSubject.create();
-        List<Integer> numbers = new ArrayList<>();
-
-        //---------start--------------
-
-        Disposable d = number$
-                .subscribe(numbers::add);
-
-        //---------end----------------
-
-        number$.onNext(1);
-        number$.onNext(2);
-
-        //---------start--------------
-
-        d.dispose();
-
-        //---------end----------------
-        number$.onNext(3);
-
-        Assert.assertEquals(numbers.size(), 2);
-        Assert.assertEquals(number$.hasComplete(), false);
-    }
 
     @Test()
     public void assignment8() {
@@ -176,10 +135,6 @@ public class HotAssignments {
 
         //---------start--------------
         // HINT: TestScheduler
-        TestScheduler scheduler = new TestScheduler();
-        number$
-                .delay(99, TimeUnit.MILLISECONDS, scheduler)
-                .subscribe(number::set);
 
         //---------end----------------
 
@@ -188,9 +143,27 @@ public class HotAssignments {
         Assert.assertEquals(number.get(), 0);
 
         //---------start--------------
-        scheduler.advanceTimeBy(200, TimeUnit.MILLISECONDS);
+
         //---------end--------------
 
         Assert.assertEquals(number.get(), 1);
+    }
+
+    /**
+     * BONUS
+     */
+    @Test
+    public void assignment9() {
+        Observable<Integer> allNumbers$ = Observable.just(1, 2, 3, 4, 5);
+        List<Integer> even = new ArrayList<>();
+        List<Integer> odd = new ArrayList<>();
+
+        //---------start----------------
+
+        //----------end-----------------
+
+        Assert.assertEquals(even, Arrays.asList(2, 4));
+        Assert.assertEquals(odd, Arrays.asList(1, 3, 5));
+
     }
 }
