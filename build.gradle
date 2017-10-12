@@ -1,0 +1,32 @@
+group 'nl.quintor.rxjava'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.4'
+    testCompile group: 'org.testng', name: 'testng', version: '6.11'
+}
+
+test {
+    test.testLogging.showStandardStreams = true
+    def groups = System.getProperty("groups")
+    if(groups == null || groups.equals('all')) {
+        useTestNG() {
+            suites 'TestNG.xml'
+        }
+    }else {
+        useTestNG() {
+            includeGroups groups
+        }
+    }
+    options {
+        systemProperty 'groups', System.getProperty('groups')
+    }
+}

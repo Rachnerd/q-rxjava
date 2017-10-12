@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Suite" parallel="tests" thread-count="2" verbose="1">
+    <test name="All">
+        <packages>
+            <package name="nl.quintor.qrxjava"/>
+        </packages>
+    </test>
+</suite>
